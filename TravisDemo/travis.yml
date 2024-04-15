@@ -1,0 +1,30 @@
+language: java
+
+jdk:
+  - openjdk19
+
+# Cache Maven dependencies to speed up builds
+cache:
+  directories:
+    - $HOME/.m2
+
+script:
+  # Run the Maven build command
+  - mvn clean install
+
+# Define stages (optional)
+jobs:
+  include:
+    - stage: test
+      script: mvn test
+    - stage: deploy
+      if: branch = main
+      script: mvn deploy
+
+# Integrate with notifications
+notifications:
+  email:
+    recipients:
+      - 19316@uktc-bg.com
+    on_success: change  # default: change
+    on_failure: always  # default: always
